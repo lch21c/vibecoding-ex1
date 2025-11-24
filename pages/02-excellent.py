@@ -207,7 +207,7 @@ else:
 st.sidebar.markdown("---")
 st.sidebar.caption("👆 MBTI 유형을 선택하여 분석을 시작하세요.")
 
-# 
+# # 
 
 [Image of global MBTI distribution map]
- # 이미지 태그를 주석 처리했습니다.
+ # 이 라인을 주석으로 처리하여 SyntaxError를 해결했습니다.
