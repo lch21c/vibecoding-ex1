@@ -135,7 +135,7 @@ else:
     st.subheader("🌎 전 세계 MBTI 통계 분석")
     
     # MBTI별 통계 데이터 추출
-    mbti_stats = df[['Country', selected_mbti]]
+    mbti_stats = df[['Country', selected_mbti]].copy()
     mbti_stats['Proportion (%)'] = mbti_stats[selected_mbti] * 100
     mbti_stats = mbti_stats.sort_values(by='Proportion (%)', ascending=False)
     
@@ -168,9 +168,11 @@ else:
     # Bar Chart로 분포 시각화
     st.bar_chart(mbti_stats.set_index('Country')['Proportion (%)'].head(20)) # 상위 20개 국가만 표시 (너무 많으면 차트가 복잡해지므로)
     
+    # ERROR FIX: st.dataframe의 caption 인수를 st.caption으로 분리하여 수정
+    st.caption("분포율 상위 10개 국가")
     st.dataframe(
         mbti_stats[['Country', 'Proportion (%)']].rename(columns={'Proportion (%)': f'{selected_mbti} 분포율 (%)'}).head(10),
         use_container_width=True,
         hide_index=True,
-        caption="분포율 상위 10개 국가"
+        # caption="분포율 상위 10개 국가" # 에러 발생 인수를 제거
     )
