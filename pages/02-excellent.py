@@ -82,7 +82,8 @@ st.title("🌟 MBTI 글로벌 통계 분석 웹 앱")
 if selected_mbti == "":
     st.header("👋 환영합니다!")
     st.info("👈 왼쪽 사이드바에서 **MBTI 유형을 선택**하여 해당 유형의 설명과 글로벌 통계 분석 결과를 확인하세요.")
-    st.image("https://i.imgur.com/G0G0K0D.png", caption="MBTI 유형 선택을 기다리고 있어요.", use_column_width=True) # 적절한 이미지를 찾아서 사용해주세요.
+    # 실제 이미지가 없으므로, 플레이스홀더 주소를 사용했습니다.
+    st.image("https://i.imgur.com/G0G0K0D.png", caption="MBTI 유형 선택을 기다리고 있어요.", use_column_width=True) 
 
 else:
     # --- 선택된 MBTI 정보 표시 ---
@@ -209,4 +210,4 @@ st.sidebar.caption("👆 MBTI 유형을 선택하여 분석을 시작하세요."
 # 
 
 [Image of global MBTI distribution map]
- # 글로벌 MBTI 분포 지도를 나타내는 이미지를 요청
+ # 이미지 태그를 주석 처리했습니다.
