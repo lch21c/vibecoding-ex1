@@ -129,8 +129,15 @@ else:
     col4.markdown(f"<p style='font-size:16px; font-weight:bold;'>{ment}</p>", unsafe_allow_html=True)
     
     # 5. Metric Card 스타일 적용
-    # *** 오류 수정: info['color'] 앞에 붙였던 '#'를 제거합니다. ***
-    style_metric_cards(background_color="#FFFFFF", border_left_color=info['color'], border_size_px=2, border_color="#000000", border_radius_px=10, border_hover_color="#0072B5", box_shadow=True)
+    # *** 최종 오류 수정: 'border_hover_color' 인수를 제거합니다. ***
+    style_metric_cards(
+        background_color="#FFFFFF", 
+        border_left_color=info['color'], 
+        border_size_px=2, 
+        border_color="#000000", 
+        border_radius_px=10, 
+        box_shadow=True
+    )
 
     st.markdown("---")
     
