@@ -2,19 +2,17 @@ import streamlit as st
 import pandas as pd
 import base64
 
-# --- 1. 파일 로드 및 설정 ---
-# 첨부된 CSV 파일 로드
+# --- 1. 파일 로드 및 설정 (변경 없음) ---
 try:
     df = pd.read_csv('countriesMBTI_16types.csv')
-    mbti_types = df.columns[1:].tolist() # MBTI 유형 리스트 (첫 번째 'Country' 제외)
+    mbti_types = df.columns[1:].tolist()
 except FileNotFoundError:
-    st.error("Error: 'countriesMBTI_16types.csv' 파일을 찾을 수 없습니다. 파일 경로를 확인해주세요.")
+    st.error("Error: 'countriesMBTI_16types.csv' 파일을 찾을 수 없습니다.")
     st.stop()
 except Exception as e:
     st.error(f"Error loading CSV file: {e}")
     st.stop()
 
-# MBTI 설명 데이터 (간단하게 주요 특징만 포함)
 mbti_descriptions = {
     "ISTJ": "🚀 현실적인 관리자: 사실에 근거하여 책임감이 강하고 논리적인 행동파입니다.",
     "ISFJ": "🏠 용감한 수호자: 성실하고 온정적이며, 타인을 돕는 데 헌신적입니다.",
@@ -34,14 +32,12 @@ mbti_descriptions = {
     "ENTJ": "👑 대담한 통솔자: 도전적이고 단호하며, 장기적인 계획을 수립하고 실행하는 데 능합니다.",
 }
 
-# MBTI 통계 기반 멘트 생성 함수
+# MBTI 통계 기반 멘트 생성 함수 (변경 없음)
 def generate_compliment(mbti_type):
-    """선택된 MBTI 유형에 기반한 멘트를 생성합니다."""
-    # 통계 평균값 계산 (국가별 분포를 기반으로 '평균적인' 특징을 도출)
     avg_proportion = df[mbti_type].mean() * 100
     
-    # 멘트 템플릿
     compliments = {
+        # ... (멘트 내용 동일) ...
         "ISTJ": f"당신은 **책임감**과 **사실**에 대한 뛰어난 집중력을 가지고 계십니다. 세계 통계에서 평균 약 **{avg_proportion:.2f}%**의 분포를 보이는, 신뢰할 수 있는 관리자 유형이시군요!",
         "ISFJ": f"당신은 **따뜻한 마음**과 **헌신**으로 주변 사람들을 돕는 수호자입니다. 세계 통계에서 평균 약 **{avg_proportion:.2f}%**의 분포를 보이며, 타인의 안녕을 위해 노력하는 모습이 인상적입니다.",
         "INFJ": f"당신은 **깊은 통찰력**과 **이상적인 신념**을 가진 옹호자입니다. 세계 통계에서 평균 약 **{avg_proportion:.2f}%**의 분포를 보이며, 조용히 세상을 바꾸는 힘을 가지고 있습니다.",
@@ -61,35 +57,75 @@ def generate_compliment(mbti_type):
     }
     return compliments.get(mbti_type, "선택하신 MBTI에 대한 맞춤 멘트를 준비 중입니다.")
 
-
-# --- 5. 배경화면 설정 함수 ---
-def set_background_image(image_file):
-    """첨부된 이미지를 배경화면으로 설정합니다."""
+# --- 5. 배경화면 및 커스텀 CSS 설정 함수 ---
+def set_custom_ui(image_file):
+    """배경화면과 Semantic UI 스타일을 모방한 커스텀 CSS를 설정합니다."""
     try:
+        # 배경 이미지 설정
         with open(image_file, "rb") as f:
             img_bytes = f.read()
         encoded = base64.b64encode(img_bytes).decode()
         
-        # Streamlit 기본 스타일 오버라이드를 위한 Markdown 및 CSS 사용
+        # Semantic UI 스타일을 모방한 CSS ( Segment, Header, Label, Card 등 )
         st.markdown(
             f"""
             <style>
             .stApp {{
                 background-image: url("data:image/jpeg;base64,{encoded}");
                 background-size: cover;
-                background-attachment: fixed; /* 스크롤 시 배경 고정 */
+                background-attachment: fixed;
                 background-position: center;
-                color: white; /* 텍스트 색상 기본값 흰색으로 설정 (가독성을 위해) */
+                color: white; 
             }}
-            /* 가독성 향상을 위해 메인 콘텐츠 영역의 배경을 약간 어둡게 설정 */
+            
+            /* 콘텐츠 영역 배경 및 가독성 향상 */
             .main > div {{
-                background-color: rgba(0, 0, 0, 0.5); /* 검은색 반투명 오버레이 */
-                padding: 10px;
+                background-color: rgba(0, 0, 0, 0.5); 
+                padding: 15px;
                 border-radius: 10px;
             }}
-            /* 제목 및 텍스트 색상 설정 */
+            
+            /* Semantic UI 모방: Segment 스타일 (박스) */
+            .ui-segment {{
+                background-color: rgba(255, 255, 255, 0.1); 
+                border-radius: 5px;
+                padding: 20px;
+                margin-bottom: 20px;
+                box-shadow: 0 1px 2px 0 rgba(34, 36, 38, .15);
+                border: 1px solid rgba(34, 36, 38, .15);
+            }}
+
+            /* Semantic UI 모방: Header 스타일 */
+            .ui-header {{
+                font-weight: bold;
+                margin-top: 0;
+                color: #2185D0; /* Semantic Blue */
+            }}
+            
+            /* Semantic UI 모방: Label 스타일 */
+            .ui-label {{
+                display: inline-block;
+                padding: .5em .8em;
+                font-size: .875em;
+                font-weight: 700;
+                line-height: 1;
+                text-align: center;
+                white-space: nowrap;
+                vertical-align: middle;
+                border-radius: .28571429rem;
+                color: white;
+                background-color: #21BA45; /* Semantic Green */
+                margin-right: 5px;
+            }}
+            
+            /* Streamlit 기본 텍스트 색상 오버라이드 */
             h1, h2, h3, h4, .stText, .stMarkdown p, .stMarkdown li {{
                 color: white !important; 
+            }}
+            /* Streamlit Success 박스 색상 커스터마이징 */
+            div[data-testid="stSuccess"] {{
+                background-color: rgba(33, 186, 69, 0.7); /* Semantic Green */
+                border-left: 5px solid #21BA45;
             }}
             </style>
             """,
@@ -100,20 +136,20 @@ def set_background_image(image_file):
     except Exception as e:
         st.warning(f"경고: 배경 이미지 설정 중 오류 발생: {e}")
 
-# 'dog.jpg' 파일을 배경으로 설정
-set_background_image('dog.jpg')
+# 커스텀 UI 설정 적용
+set_custom_ui('dog.jpg')
 
 
 # --- 2. 웹앱 메인 구성 및 사용자 입력 ---
-st.title("🐾 MBTI 탐험 웹 앱 (feat. 댕댕이)")
+st.title("🐾 MBTI 탐험 웹 앱 (Semantic Style)")
 st.caption("선택하신 MBTI 유형에 대한 정보와 통계를 제공합니다.")
 
-# 사이드바에 MBTI 선택 드롭다운 생성
+# 사이드바에 MBTI 선택 드롭다운 생성 (Streamlit 기본 위젯 사용)
 with st.sidebar:
     st.header("✨ MBTI 선택")
     selected_mbti = st.selectbox(
         "당신의 MBTI 유형은 무엇인가요?",
-        options=[""] + mbti_types, # 4. 처음 접속 시 공백/선택 안 함 상태로 시작
+        options=[""] + mbti_types,
         index=0,
         format_func=lambda x: "👇 유형을 선택하세요" if x == "" else x
     )
@@ -121,13 +157,22 @@ with st.sidebar:
 # --- 4. 초기 화면 메시지 ---
 if selected_mbti == "":
     st.info("⬆️ **왼쪽 사이드바**에서 당신의 **MBTI 유형**을 선택해 주세요!")
-    # 가독성 향상을 위해 중앙 콘텐츠에 배경색 추가
-    st.markdown("<style> .stApp > div:first-child > section:nth-child(2) { background-color: rgba(0, 0, 0, 0.7); padding: 20px; border-radius: 10px; } </style>", unsafe_allow_html=True)
 
 else:
-    # --- 2. 해당하는 MBTI에 대한 설명 보여주기 ---
-    st.header(f"🌟 {selected_mbti} : {mbti_descriptions.get(selected_mbti).split(': ')[0]}")
-    st.markdown(f"**주요 특징:** {mbti_descriptions.get(selected_mbti).split(': ')[1]}")
+    # --- 2. 해당하는 MBTI에 대한 설명 보여주기 (Semantic Header/Segment 적용) ---
+    
+    # Semantic Segment 시작
+    st.markdown('<div class="ui-segment">', unsafe_allow_html=True)
+    
+    # Semantic Header 스타일
+    mbti_name = mbti_descriptions.get(selected_mbti).split(': ')[0]
+    st.markdown(f'<h2 class="ui-header">{selected_mbti} : {mbti_name}</h2>', unsafe_allow_html=True)
+    
+    mbti_feature = mbti_descriptions.get(selected_mbti).split(': ')[1]
+    st.markdown(f"**주요 특징:** {mbti_feature}")
+    
+    # Semantic Segment 닫기
+    st.markdown('</div>', unsafe_allow_html=True)
     
     st.markdown("---")
     
@@ -141,11 +186,12 @@ else:
     
     # 멘트 생성 및 표시
     compliment_message = generate_compliment(selected_mbti)
+    # st.success는 CSS 오버라이드를 통해 Semantic Green 스타일을 모방합니다.
     st.success(f"**맞춤 멘트:** {compliment_message}")
     
     st.markdown("---")
 
-    # 통계 요약 (평균, 최대, 최소)
+    # 통계 요약 (Semantic Label 스타일 적용)
     avg_prop = mbti_stats['Proportion (%)'].mean()
     max_country = mbti_stats.iloc[0]['Country']
     max_prop = mbti_stats.iloc[0]['Proportion (%)']
@@ -154,11 +200,14 @@ else:
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.metric(label="평균 분포율", value=f"{avg_prop:.2f}%")
+        st.markdown(f'<div class="ui-label">평균 분포율</div>', unsafe_allow_html=True)
+        st.metric(label="", value=f"{avg_prop:.2f}%")
     with col2:
-        st.metric(label="최대 분포 국가", value=f"{max_country}", delta=f"{max_prop:.2f}%")
+        st.markdown(f'<div class="ui-label">최대 분포 국가</div>', unsafe_allow_html=True)
+        st.metric(label="", value=f"{max_country}", delta=f"{max_prop:.2f}%")
     with col3:
-        st.metric(label="최소 분포 국가", value=f"{min_country}", delta=f"{min_prop:.2f}%", delta_color="inverse")
+        st.markdown(f'<div class="ui-label">최소 분포 국가</div>', unsafe_allow_html=True)
+        st.metric(label="", value=f"{min_country}", delta=f"{min_prop:.2f}%", delta_color="inverse")
         
     st.markdown("---")
     
@@ -166,13 +215,12 @@ else:
     st.caption(f"국가별 **{selected_mbti}** 유형 분포 (%):")
     
     # Bar Chart로 분포 시각화
-    st.bar_chart(mbti_stats.set_index('Country')['Proportion (%)'].head(20)) # 상위 20개 국가만 표시 (너무 많으면 차트가 복잡해지므로)
+    st.bar_chart(mbti_stats.set_index('Country')['Proportion (%)'].head(20))
     
-    # ERROR FIX: st.dataframe의 caption 인수를 st.caption으로 분리하여 수정
+    # 표 상단에 Semantic Caption 적용
     st.caption("분포율 상위 10개 국가")
     st.dataframe(
         mbti_stats[['Country', 'Proportion (%)']].rename(columns={'Proportion (%)': f'{selected_mbti} 분포율 (%)'}).head(10),
         use_container_width=True,
         hide_index=True,
-        # caption="분포율 상위 10개 국가" # 에러 발생 인수를 제거
     )
